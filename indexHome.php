@@ -143,6 +143,7 @@
                     if (callback.error){
                         msgErro('Falha', callback.message);
                     }
+
                     if (!callback.error){
                         $('.btn-fechar-parametros').click(); // Gambiarra pra forçar fechar modal
                         msgSucesso('Sucesso', callback.message);
