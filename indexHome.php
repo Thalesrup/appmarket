@@ -141,6 +141,7 @@
                 success: function(callback){
 
                     if (callback.error){
+                        console.log(callback);
                         msgErro('Falha', callback.message);
                     }
 
