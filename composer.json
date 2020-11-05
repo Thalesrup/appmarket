@@ -1,0 +1,24 @@
+{
+  "name": "thalesrup",
+  "description": "Sistema Web Mini-Mercado",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Thales F. Ruppenthal",
+      "email": "thales.rup@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Source\\": "Source/"
+    },
+    "files": [
+      "Source/config.php",
+      "Source/functions.php"
+    ]
+  },
+  "require": {
+
+  }
+}
