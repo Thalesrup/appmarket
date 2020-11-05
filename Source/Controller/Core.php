@@ -62,7 +62,7 @@ class Core {
         if($metodoCrud == 'update'){
 
             $id          = $data['id'];
-            $dataInsert  = $this->salvarImagem($data);
+            $dataInsert  = $this->salvarImagem($data, $tabela);
             $update      = $this->conexao->update($tabela, $dataInsert, ['id' => $id]);
 
             if(!$update){
