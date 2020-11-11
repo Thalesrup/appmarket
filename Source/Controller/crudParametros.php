@@ -43,6 +43,7 @@ function renderizaModalParametros($parametro)
                         </div>
                         <div class="modal-body">
                         <div class="row">
+                        <input hidden name="id" value="'.$parametro['id'].'"/>
                                         <div class="col-md-5">
                                             <div class="form-group">
                                                 <label class="form-label" for="nomeMercado">Nome Mercado</label>
@@ -52,18 +53,27 @@ function renderizaModalParametros($parametro)
                                             <div class="form-group">
                                                 <label class="form-label" for="usuarioResponsavel">Responsável</label>
                                                 <select name="usuarioResponsavel" id="usuarioResponsavel" class="form-control">
-//                                                   '.$selecOptions.'
+                                                   '.$selecOptions.'
                                                 </select>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="form-label" for="imgLogoMercado">Logo Mercado</label>
                                                 <input name="imgLogoMercado" type="file" class="form-control-file" id="imgLogoMercado">
+                                                <br>
+                                                <div class="card card-previa" style="width: 15rem;">
+                                                    <div class="card-body">
+                                                        <h4>Prévia</h4>
+                                                        <img id="previaImgEscolhida" src="'.montaSrcImagem($parametro['imgLogoMercado']).'" style="width: 200px; height: 200px;" alt="Imagem Selecionada" />
+                                                        <p></p>
+                                                        <a href="" class="card-link card-descartar">Descartar</a>
+                                                    </div>
+                                                </div>
                                             </div>
-
+                                            
                                         </div>
 
-                                        <div class="col-md-3">
+                                        <div class="col-md-5">
                                         
                                             <div class="form-group">
                                                 <label for="filtroValidade">Filtro Validade Minima (Dias)</label>
@@ -73,13 +83,13 @@ function renderizaModalParametros($parametro)
                                         </div>
                                             
                                     </div>
-                        </div>
+                        </div> 
                         <div class="modal-footer">
                             <input type="button" class="btn btn-fechar-parametros btn-default" data-dismiss="modal" value="Fechar">
                             <button id="btn-atualizar-parametros" class="btn btn-danger">
                                 Atualizar Parametros
                             </button>
-                        </div>';
+                        </div> <script src="./assets/scripts/editarParametros.js"></script>';
 
     echo json_encode($modal);
     return;
@@ -106,6 +116,26 @@ function getListUsuarios($idUsuario)
 
 
 }
+
+function montaSrcImagem(string $nomeImagem)
+{
+    $path         = imagemPlataforma('parametros');
+    $pathCompleco = $path.$nomeImagem;
+    return $pathCompleco;
+}
+
+/*
+ * Function Quebra Galho para Montar a url usando as imagens salvas
+ * Necessita Refatoração
+ * */
+
+function imagemPlataforma(string $diretorio)
+{
+    if($diretorio == 'parametros'){
+        return "http://".$_SERVER['SERVER_NAME']."/sm/v2/storage/imagens/plataforma/logo/";
+    }
+}
+
 
 
 

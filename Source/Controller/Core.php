@@ -1,8 +1,6 @@
 <?php
 
 namespace Source\Controller;
-use phpDocumentor\Reflection\Types\Boolean;
-
 require 'CoreCrud.php';
 
 class Core {
@@ -112,7 +110,7 @@ class Core {
         $dataFiltro = (new \DateTime())->add(new \DateInterval('P'.$this->prazoValidade.'D'))->format('Y-m-d');
 
         $query      = "SELECT * FROM $nomeTabela WHERE dataValidade BETWEEN '$dataAtual' AND '$dataFiltro'";
-        $result = $this->conexao->getRecordFromQueryCustom($query, $resetArray);
+        $result     = $this->conexao->getRecordFromQueryCustom($query, $resetArray);
 
         return $result;
 
@@ -156,7 +154,7 @@ class Core {
         $query = $this->conexao->getRecordFromQueryCustom("SELECT * FROM $nomeTabela", true);
 
         if(!empty($query) && !$retornoQuery){
-            $this->nomeMercado        = $query['nomeMercado'] ?? 'Nome Não Informado';
+            $this->nomeMercado        = $query['nomeMercado'] ?? 'Defina o Nome do Mercado em Configurações';
             $this->prazoValidade      = $query['filtroValidade'] ?? '';
             $this->responsavelMercado = $query['usuarioResponsavel'] ?? 'Responsável Não Informado';
         }
@@ -196,6 +194,19 @@ class Core {
         return $this->responsavelMercado;
     }
 
+    public function imagemPlataforma(string $diretorio)
+    {
+        if($diretorio == 'parametros'){
+            return "/storage/imagens/plataforma/logo/";
+        }
+        if($diretorio == 'produtos'){
+            return "/storage/imagens/produtos/";
+        }
+        if($diretorio == 'usuario'){
+            return "/storage/imagens/plataforma/perfil/";
+        }
+    }
+
     public function salvarImagem(array $dataPost, string $tabela)
     {
         define ('SITE_ROOT', realpath(dirname(__DIR__).'/../'));
@@ -203,11 +214,12 @@ class Core {
         $arrayDadosImagem   = $dataPost[$colunaImagemTabela];
         $nomeArquivo        = $arrayDadosImagem['name'];
         $dirTempArquivo     = $arrayDadosImagem["tmp_name"];
+        $setDiretorioImagem = $this->imagemPlataforma($tabela);
 
         if(!empty($nomeArquivo)){
 
             if(!move_uploaded_file($dirTempArquivo,
-                SITE_ROOT.'/storage/imagens/produtos/'. $nomeArquivo)){
+                SITE_ROOT.$setDiretorioImagem. $nomeArquivo)){
                 return false;
             }
 
@@ -234,6 +246,9 @@ class Core {
         if($tabela == 'parametros'){
             return 'imgLogoMercado';
         }
+        if($tabela == 'usuario'){
+            return 'imgPeerfilUsuario';
+        }
     }
 
     public function definirCRUD(array $data)
@@ -259,6 +274,19 @@ class Core {
         $callback['message'] = $menssagem;
 
         return json_encode($callback);
+    }
+
+    public function getLogin(string $table,array $dataPost)
+    {
+        $query      = "SELECT * FROM $nomeTabela WHERE email = {$dataPost->email} AND senha = {$dataPost->senha}";
+        $result     = $this->conexao->getRecordFromQueryCustom($query, true);
+
+        if(!$result){
+            echo $this->msgCallback(true, "Usuário ou Senha Incorretos");
+            return;
+        }
+
+        return $result;
     }
 
 }

@@ -19,10 +19,6 @@ if (!defined('FILEPATH')){
 
 /** caminho no server para o sistema **/
 if (!defined('BASEURL')){
-    define('BASEURL', '/mercadoweb/');
+    define('BASEURL', 'localhost/sm/v2/');
 }
 
-///** caminho do arquivo de banco de dados **/
-//if (!defined('DBSITE')){
-//    define('DBSITE', FILEPATH . 'database.php');
-//}

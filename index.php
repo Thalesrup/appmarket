@@ -40,7 +40,7 @@
             <script src="https://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
             <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.js"></script>
             <script src="./assets/scripts/editarProduto.js"></script>
-        </div>
+            </div>
     </div>
 <script type="text/javascript" src="./assets/scripts/main.js"></script>
     <div class="ajax_load">
@@ -49,5 +49,5 @@
             <div class="ajax_load_box_title">Aguarde, carregando!</div>
         </div>
     </div>
-
 </body>
+
