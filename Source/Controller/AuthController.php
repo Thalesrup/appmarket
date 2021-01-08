@@ -5,25 +5,31 @@ require 'Core.php';
 
 class AuthController
 {
-    private $table   = 'usuario';
-    private $conexap;
+    private $table          = 'usuario';
+    private $tableImageBLOB = 'imagens_blob';
+    private $conexao;
 
-    public function __construct($table)
+    public function __construct()
     {
-        $this->conexap = new Core();
-        $this->table   = $table;
+        $this->conexao = new Core();
     }
 
     public function login($dataPost)
     {
         $validaChavesDataPost = $this->validaColunasLogin($dataPost);
 
+        if($validaChavesDataPost){
+            $return = $this->conexao->queryLogin($this->table, $dataPost);
+
+            return empty($return) ? $this->conexao->msgCallback(true,"Usuário ou Senhas Inválidos")
+                                  : ['error' => false, 'data' => $return];
+        }
     }
 
     public function validaColunasLogin($dataPost)
     {
-        if(!in_array('email', $dataPost) && !in_array('senha',$dataPost)){
-            echo $this->conexap->msgCallback(true, "Necessário Informar Email e Senha");
+        if(!array_key_exists('email', $dataPost) && !array_key_exists('senha',$dataPost)){
+            echo $this->conexao->msgCallback(true, "Necessário Informar Email e Senha");
             return;
         }
         return true;
@@ -31,13 +37,16 @@ class AuthController
 
     public function criarConta(array $dataPost)
     {
-        $userData = filter_var_array($dataPost, FILTER_SANITIZE_STRING);
-        if (in_array("", $userData)){
-            echo $this->conexap->msgCallback(true, "Necessário Preencher Todas as Informações")
-            return;
-        }
+        $this->conexao->inserir($this->table, $dataPost, true);
+    }
 
-        $retorno = $this->conexap->inserir($this->table, $userData);
+    public function getUsuarios()
+    {
+        return $this->conexao->getAllUsuarios($this->table);
+    }
 
+    public function getImgBlob($idImagemBlob)
+    {
+        return $this->conexao->getImagemBLOB($this->tableImageBLOB, $idImagemBlob);
     }
 }

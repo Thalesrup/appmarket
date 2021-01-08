@@ -37,7 +37,7 @@
 
 		                    	<div class="wizard-header">
 		                        	<h3 class="wizard-title">
-		                        		Instalação Banco do Dados
+                                        Instalação Sistema Web Market
 		                        	</h3>
 									<h5>Informe os dados de conexão com o banco de dados</h5>
 		                    	</div>

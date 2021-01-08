@@ -3,4 +3,4 @@
 define('HOST', 'localhost');
 define('USER', 'root');
 define('PASS', '');
-define('NAME', 'mercado');
+define('NAME', 'mercado2');

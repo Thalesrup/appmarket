@@ -2,6 +2,7 @@
 
 use Source\Controller\Core;
 require_once ('Source\Controller\Core.php');
+session_start();
 
 $core               = new Core();
 $quantidadeProdutos = $core->contagemProdutosTotais()['total'];
@@ -21,6 +22,12 @@ $offset = 10;
 
 $limit = ($page - 1) * 10;
 
+if(empty($_SESSION['logado'])){
+    header("Location: login");
+}
+
+$nomeUsuario = $_SESSION['logado']['nome'];
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -39,6 +46,7 @@ $limit = ($page - 1) * 10;
     <link rel="stylesheet" href="./assets/css/loadin_ajax.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
     <script src="./assets/scripts/quagga.min.js"></script>
+    <script src="./assets/scripts/jquery.blob.image.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="//wurfl.io/wurfl.js"></script>

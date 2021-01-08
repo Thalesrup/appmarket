@@ -63,7 +63,7 @@ $listagemProdutos   = $core->listarProdutos($limit, $offset);
                                 <td class="text-center"><?php echo $produto['valorUnitario'] ?></td>
                                 <td class="text-center">
                                     <button type="button" data-value="<?php echo $produto['id']; ?>" id="btn-editar-produto" onclick="editarProduto(<?php echo $produto['id']; ?>)" class="mb-2 mr-2 btn-transition btn btn-outline-primary">Editar</button>
-                                    <button type="button" id="btn-excluir-produto" class="mb-2 mr-2 btn-transition btn btn-outline-danger">Excluir</button>
+                                    <button type="button" id="btn-excluir-produto" class="mb-2 mr-2 btn-transition btn btn-outline-danger" onclick="excluirProduto(<?php echo $produto['id']; ?>)">Excluir</button>
                                 </td>
                             </tr>
                             <?php

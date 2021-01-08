@@ -1,20 +1,22 @@
 <?php
 
 namespace Source\Controller;
+
 require 'CoreCrud.php';
 
-class Core {
+class Core extends CoreCrud {
 
-    protected $conexao;
-    protected $tabelaSelecionada;
-    protected $dbName             = 'mercado';
-    protected $dbUser             = 'root';
-    protected $dbPassword         = '';
-    protected $dbHost             = 'localhost';
-    protected $contagemprodutos   = 0;
-    protected $nomeMercado;
-    protected $prazoValidade;
-    protected $responsavelMercado;
+    private $conexao;
+    private $tabelaSelecionada;
+    private $dbName                  = 'mercado';
+    private $dbUser                  = 'root';
+    private $dbPassword              = '';
+    private $dbHost                  = 'localhost';
+    private $contagemprodutos        = 0;
+    private $nomeMercado;
+    private $prazoValidade;
+    private $responsavelMercado;
+    private $tabelaSalvarImagensBlob = 'imagens_blob';
 
     public function __construct()
     {
@@ -37,14 +39,14 @@ class Core {
         }
     }
 
-    public function inserir(string $tabela, array $data)
+    public function inserir(string $tabela, array $data, $blob = false)
     {
 
         $metodoCrud = $this->definirCRUD($data);
 
         if($metodoCrud == 'insert'){
 
-            $dataInsert  = $this->salvarImagem($data, $tabela);
+            $dataInsert  = $this->salvarImagem($data, $tabela, $blob);
             $insert      = $this->conexao->insert($tabela, $dataInsert);
 
             if(!$insert){
@@ -88,6 +90,14 @@ class Core {
         $retorno = $this->conexao->getDataById($nomeTabela, $idProduto);
         return $retorno;
     }
+
+    public function queryLogin($table, $dataPost)
+    {
+        $dataPost = is_array($dataPost) ? (object)$dataPost : $dataPost;
+        $query    = "SELECT * FROM $table WHERE login = '$dataPost->login' AND senha = '$dataPost->senha'";
+        return $this->conexao->getRecordFromQueryCustom($query);
+    }
+
 
     public function listarProdutosVencidosExpirando($limit = 0, $offset = 10)
     {
@@ -178,6 +188,15 @@ class Core {
 
     }
 
+    public function getImagemBLOB($nomeTable, $idWhere)
+    {
+        $query = $this->conexao->getRecordFromQueryCustom("SELECT * FROM $nomeTable WHERE id = $idWhere", true);
+        if(!empty($query)){
+            return $query;
+        }
+
+        return false;
+    }
 
     public function getValidade()
     {
@@ -202,40 +221,82 @@ class Core {
         if($diretorio == 'produtos'){
             return "/storage/imagens/produtos/";
         }
-        if($diretorio == 'usuario'){
-            return "/storage/imagens/plataforma/perfil/";
+
+    }
+
+    public function salvarImagem(array $dataPost, string $tabela, $blob = false)
+    {
+        if(!$blob){
+            define ('SITE_ROOT', realpath(dirname(__DIR__).'/../'));
+            $colunaImagemTabela = $this->validaColunaImg($tabela);
+            $arrayDadosImagem   = $dataPost[$colunaImagemTabela];
+            $nomeArquivo        = $arrayDadosImagem['name'];
+            $dirTempArquivo     = $arrayDadosImagem["tmp_name"];
+            $setDiretorioImagem = $this->imagemPlataforma($tabela);
+
+            if(!empty($nomeArquivo)){
+
+                if(!move_uploaded_file($dirTempArquivo,
+                    SITE_ROOT.$setDiretorioImagem. $nomeArquivo)){
+                    return false;
+                }
+
+                unset($dataPost[$colunaImagemTabela]);
+                $dataPost[$colunaImagemTabela] = $nomeArquivo;
+
+                return $dataPost;
+
+            } else {
+
+                unset($dataPost[$colunaImagemTabela]);
+                $dataPost[$colunaImagemTabela] = null;
+
+                return $dataPost;
+            }
+        } else {
+            return $this->salvarImagemBLOB($dataPost, $tabela);
+        }
+
+    }
+
+    public function salvarImagemBLOB(array $dataPost, string $tabela)
+    {
+        $menssagemErrorCustom = ['error' => true ,'message' => 'Selecione Uma Outra Imagem'];
+        $colunaImagemTabela   = $this->validaColunaImg($tabela);
+        $arrayDadosImagem     = $dataPost[$colunaImagemTabela];
+        $arquivo              = $arrayDadosImagem["tmp_name"];
+        $tamanhoArquivo       = $arrayDadosImagem["size"];
+        $tipoArquivo          = getimageSize($arquivo);
+        $nomeArquivo          = $arrayDadosImagem["name"];
+        $validaExtensao       = pathinfo($nomeArquivo, PATHINFO_EXTENSION);
+        $extensaoArquivo      = is_bool($this->validaExtensaoImagem($validaExtensao)) ? explode("/", $tipoArquivo)[1] : $validaExtensao;
+//die(var_dump($dataPost));
+        if(is_uploaded_file($arquivo)){
+            $conteudo   = file_get_contents($arquivo);
+
+            $dataInsert = array_combine(['extensao_imagem', 'nome_imagem', 'tipo_imagem', 'arquivo_imagem'],
+                                        [$extensaoArquivo, $nomeArquivo, $tipoArquivo['mime'], $conteudo]);
+
+                $insert  = $this->conexao->insert($this->tabelaSalvarImagensBlob, $dataInsert, $returnCustom = 'id', $menssagemErrorCustom);
+                unset($dataPost[$colunaImagemTabela]);
+                $dataPost['id_imagens_blob'] = $insert;
+                return $dataPost;
+
         }
     }
 
-    public function salvarImagem(array $dataPost, string $tabela)
+    public function validaExtensaoImagem(string $extensaoImagem)
     {
-        define ('SITE_ROOT', realpath(dirname(__DIR__).'/../'));
-        $colunaImagemTabela = $this->validaColunaImg($tabela);
-        $arrayDadosImagem   = $dataPost[$colunaImagemTabela];
-        $nomeArquivo        = $arrayDadosImagem['name'];
-        $dirTempArquivo     = $arrayDadosImagem["tmp_name"];
-        $setDiretorioImagem = $this->imagemPlataforma($tabela);
+        $tabelaExtensoesValidas = [
+            'jpg',
+            'jpeg',
+            'jpe',
+            'gif',
+            'bmp',
+            'png'
+        ];
 
-        if(!empty($nomeArquivo)){
-
-            if(!move_uploaded_file($dirTempArquivo,
-                SITE_ROOT.$setDiretorioImagem. $nomeArquivo)){
-                return false;
-            }
-
-            unset($dataPost[$colunaImagemTabela]);
-            $dataPost[$colunaImagemTabela] = $nomeArquivo;
-
-            return $dataPost;
-
-        } else {
-
-            unset($dataPost[$colunaImagemTabela]);
-            $dataPost[$colunaImagemTabela] = null;
-
-            return $dataPost;
-        }
-
+        return array_search($extensaoImagem, $tabelaExtensoesValidas);
     }
 
     public function validaColunaImg(string $tabela)
@@ -247,7 +308,7 @@ class Core {
             return 'imgLogoMercado';
         }
         if($tabela == 'usuario'){
-            return 'imgPeerfilUsuario';
+            return 'imgPerfilUsuarioBlob';
         }
     }
 
@@ -283,7 +344,7 @@ class Core {
 
         if(!$result){
             echo $this->msgCallback(true, "Usuário ou Senha Incorretos");
-            return;
+            exit;
         }
 
         return $result;

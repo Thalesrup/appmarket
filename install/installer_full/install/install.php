@@ -5,7 +5,8 @@
  * Date: 03/11/2020
  */
 
-$postData = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+$postData         = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+$nomeArquivoBanco = 'mercado.sql';
 
 $action = $postData['action'];
 unset($postData['action']);
@@ -24,15 +25,27 @@ switch ($action) {
             break;
         }
 
-        if(!file_exists('dump.sql')){
-            $json['error'] = "O arquivo dump.sql não está presente no diretório de instalação!";
+        if(!file_exists($nomeArquivoBanco)){
+            $json['error'] = "O arquivo {$nomeArquivoBanco} não está presente no diretório de instalação!";
             break;
         }
 
-        $fileDump = file_get_contents('dump.sql');
+        $tempLinha = '';
+        $fileDump = file($nomeArquivoBanco);
 
         try {
-            $connect->exec($fileDump);
+            foreach ($fileDump as $linha) {
+                // Pula Os Comentários Evitando Erros
+                if (substr($linha, 0, 2) == '--' || $linha == '')
+                    continue;
+
+                    $tempLinha .= $linha;
+
+                if (substr(trim($linha), -1, 1) == ';') {
+                    $connect->query($templine);
+                    $tempLinha = '';
+                }
+            }
         } catch (PDOException $e) {
             $json['error'] = $e->getMessage();
             break;

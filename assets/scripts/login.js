@@ -1,6 +1,7 @@
 $(document).ready(function(){
-
+    console.log('teste');
     $('#form-login').submit(function (e) {
+
         e.preventDefault();
         $('#form-login').validate({
             rules: {
@@ -39,7 +40,7 @@ $(document).ready(function(){
                 $.ajax({
                     type: 'POST',
                     url: action,
-                    data: formData,
+                    data: {action: login, formData},
                     contentType: false,
                     processData: false,
                     dataType: 'json',

@@ -26,6 +26,10 @@ $(document).ready(function(){
         });
     }
 
+    window.excluirProduto = function(idProduto){
+        console.log(idProduto);
+    }
+
     $('.page-link').on('click', function(evento){
         evento.preventDefault();
         pagina      = $(this).data().value;

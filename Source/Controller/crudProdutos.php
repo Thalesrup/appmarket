@@ -26,6 +26,9 @@ function setAcao($acao)
     if(array_key_exists('paginaHome', $acao)){
         paginator($acao['paginaHome'], 'home');
     }
+    if(array_key_exists('deletarProduto', $acao)){
+        delete($acao);
+    }
 }
 
 function paginator($pagina, $local)
@@ -87,8 +90,8 @@ function renderListaProdutos(array $listaProdutos)
                                 <td class="text-center">'.$produto['dataValidade'].'</td>
                                 <td class="text-center">'.$produto['valorUnitario'].'</td>
                                 <td class="text-center">
-                                    <button type="button" onclick="editarProduto('.$produto['id'].')" id="btn-editar-produto"  data-value="'.$produto['id'].'" id="btn-editar-produto" class="mb-2 mr-2 btn-transition btn btn-outline-primary btn-editar-produto">Editar</button>
-                                    <button type="button" id="btn-excluir-produto" data-value="'.$produto['id'].'" class="mb-2 mr-2 btn-transition btn btn-outline-danger btn-excluir-produto">Excluir</button>
+                                    <button type="button" onclick="editarProduto('.$produto['id'].')" id="btn-editar-produto"  data-value="'.$produto['id'].'" class="mb-2 mr-2 btn-transition btn btn-outline-primary btn-editar-produto">Editar</button>
+                                    <button type="button" onclick="excluirProduto('.$produto['id'].')" id="btn-excluir-produto" data-value="'.$produto['id'].'" class="mb-2 mr-2 btn-transition btn btn-outline-danger btn-excluir-produto">Excluir</button>
                                 </td>
                             </tr>';
     }

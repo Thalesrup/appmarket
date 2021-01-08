@@ -5,6 +5,7 @@ namespace Source\Controller;
 class CoreCrud{
 
     protected $pdo;
+    private   $msgErrorDelete = ['error' => true, 'message' => 'Erro ao Tentar Remover Registro'];
 
     public function __construct(\PDO $pdo)
     {
@@ -178,7 +179,7 @@ class CoreCrud{
             $return = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             return ($reset) ? reset($return) : $return;
         }catch (\PDOException $e){
-            throw new \RuntimeException("Erro ao Obter os dados :".$e->getMessage());
+            throw new \RuntimeException("Erro ao Obter os dados :".$query);
         }
     }
 
@@ -264,7 +265,15 @@ class CoreCrud{
     public function deleteQry($query)
     {
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
+        try{
+            $stmt->execute();
+            echo json_encode(['error' => false, 'message' => 'Registro Removido com Sucesso']);
+            exit();
+        }catch (\PDOException $e){
+            echo json_encode($this->msgErrorDelete);
+            exit();
+        }
+
     }
 
 
@@ -275,15 +284,19 @@ class CoreCrud{
      * @param  array  $arrData  Array associativo contendo as colunas e seus respectivos valores
      * @return int    Numero de Registros Criados
      */
-    public function insert($nomeTabela, array $data)
+    public function insert($nomeTabela, array $data, $returnCustom = false, $returnErrorCustom = false)
     {
         $stmt = $this->pdo->prepare("INSERT INTO $nomeTabela (".implode(',', array_keys($data)).")
             VALUES (".implode(',', array_fill(0, count($data), '?')).")"
         );
         try{
             $stmt->execute(array_values($data));
-            return $stmt->rowCount();
+            return is_bool($returnCustom) ? $stmt->rowCount() : $this->pdo->lastInsertId($returnCustom);
         } catch (\PDOException $e) {
+            if(is_array($returnErrorCustom)){
+                echo json_encode($returnErrorCustom);
+                exit();
+            }
             throw new \RuntimeException("[".$e->getCode()."] : ". $e->getMessage());
         }
     }

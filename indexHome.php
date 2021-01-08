@@ -74,7 +74,7 @@
                         </div>
                         <div class="widget-content-left  ml-3 header-user-info">
                             <div class="widget-heading">
-                                Alina Mclourd
+                                <?php echo $nomeUsuario; ?>
                             </div>
                             <div class="widget-subheading">
                                 Área Usuário
