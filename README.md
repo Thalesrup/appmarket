@@ -38,7 +38,42 @@ Simples e Pequeno, App Market
 
 ### Imagens da Plataforma
 
-<img src="http://www.dwuser.com/education/content/creating-responsive-tiled-layout-with-pure-css/images/demo/12.jpg" />
+<table align="center">
+<h1 style="text-align:center">Imagens Plataforma</h1>
+    <tr style="text-align:center">
+        <td style="text-align:center"><strong>Install App</strong></td>
+    </tr>
+    <tr>
+       <td>
+        <img src="http://webserver666.online/imgAppMarket/installAppMarket.png" 
+        alt="Tela Instal 01" 
+        width="800"
+        height="600">
+        </td>
+    </tr>
+    <tr>
+       <td style="text-align:center"><strong>DB Migrations</strong></td>
+        <tr>
+		<td>
+		<img src="http://webserver666.online/imgAppMarket/installAppMarketMigrations.png" 
+        alt="Tela Install Migrations" 
+        width="800"
+        height="600">
+		</td>
+		</tr>
+    </tr>
+	<tr>
+       <td style="text-align:center"><strong>Create Admin</strong></td>
+        <tr>
+		<td>
+		<img src="http://webserver666.online/imgAppMarket/installAppMarketMigrationsSuccess.png" 
+        alt="Tela Criar Admin" 
+        width="800"
+        height="600">
+		</td>
+		</tr>
+    </tr>
+</table>
 
 
 
