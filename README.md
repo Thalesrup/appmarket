@@ -40,7 +40,6 @@ Simples e Pequeno, App Market
 
 <p align="center">
   <img src="http://webserver666.online/imgAppMarket/login.png" width="350" title="hover text">
-  <img src="http://webserver666.online/imgAppMarket/login.png" width="350" alt="accessibility text">
 </p>
 ![alt text](http://webserver666.online/imgAppMarket/login.png)
 
