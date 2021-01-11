@@ -38,8 +38,11 @@ Simples e Pequeno, App Market
 
 ### Imagens da Plataforma
 
-<p align="center">
+<div>
   <label><strong>Login Sistema</strong></label>
+  <p align="center">
   <img src="http://webserver666.online/imgAppMarket/login.png" width="350" title="hover text">
 </p>
+</div>
+
 
