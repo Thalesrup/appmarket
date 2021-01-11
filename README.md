@@ -38,13 +38,7 @@ Simples e Pequeno, App Market
 
 ### Imagens da Plataforma
 
-    <div>
-      <div>
-        <img src="http://www.dwuser.com/education/content/creating-responsive-tiled-layout-with-pure-css/images/demo/12.jpg" />
-        <!--footer -->
-        <div>Winding garden path</div>
-      </div>
-    </div>
-  </div>
+<img src="http://www.dwuser.com/education/content/creating-responsive-tiled-layout-with-pure-css/images/demo/12.jpg" />
+
 
 
