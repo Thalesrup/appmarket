@@ -40,6 +40,12 @@ Simples e Pequeno, App Market
 
 <div>
   <label><strong>Login Sistema</strong></label>
+  <p align="left">
+  <img src="http://webserver666.online/imgAppMarket/login.png" width="350" title="hover text">
+</p>
+</div>
+<div>
+  <label><strong>Login Sistema</strong></label>
   <p align="center">
   <img src="http://webserver666.online/imgAppMarket/login.png" width="350" title="hover text">
 </p>
