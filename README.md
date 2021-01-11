@@ -38,7 +38,6 @@ Simples e Pequeno, App Market
 
 ### Imagens da Plataforma
 
-<section class="no-touch">
 
   <div class="wrap">
     
@@ -114,6 +113,5 @@ Simples e Pequeno, App Market
     
   </div>
   
-</section>
 
 
