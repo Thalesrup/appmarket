@@ -69,7 +69,7 @@ Simples e Pequeno, App Market
 		<img src="http://webserver666.online/imgAppMarket/installAppMarketMigrationsSuccess.png" 
         alt="Tela Criar Admin" 
         width="800"
-        height="600">
+        height="800">
 		</td>
 		</tr>
     </tr>
