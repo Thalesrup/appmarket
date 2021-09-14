@@ -10,11 +10,11 @@ try {
     $consultaSQL = "SELECT * FROM imagens_blob WHERE id = 1";
     $exComando   = $conecta->prepare($consultaSQL);
     $exComando->execute();
-    $cuzin = $exComando->fetchAll(\PDO::FETCH_ASSOC)[0];
-//        var_dump($cuzin);
-        $tipo     = $cuzin['tipo_imagem'];
-        $conteudo = $cuzin['arquivo_imagem'];
-        header("Content-type: " . $cuzin['tipo_imagem']);
+    $c = $exComando->fetchAll(\PDO::FETCH_ASSOC)[0];
+//        var_dump($c);
+        $tipo     = $c['tipo_imagem'];
+        $conteudo = $c['arquivo_imagem'];
+        header("Content-type: " . $c['tipo_imagem']);
         echo $conteudo;
 
 } catch (PDOException $erro) {
